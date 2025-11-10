@@ -14,6 +14,10 @@ const gameSchema = new mongoose.Schema(
       type: Date,
       required: [true, "releaseDate is required"],
     },
+    price: {
+      type: Number,
+      required: [true, "price is required"],
+    },
     genres: [{ type: mongoose.Schema.Types.ObjectId, ref: "Genre" }],
     developers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Developer" }],
     coverImage: {

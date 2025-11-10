@@ -12,6 +12,9 @@ import Dashboard from "./components/pages/Dashboard.jsx";
 import Game from "./components/pages/Game.jsx";
 import Genre from "./components/pages/Genre.jsx";
 import Developer from "./components/pages/Developer.jsx";
+import { GameForm } from "./components/pages/GameForm.jsx";
+import { GenreForm } from "./components/pages/GenreForm.jsx";
+import { DeveloperForm } from "./components/pages/DeveloperForm.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +23,9 @@ const router = createBrowserRouter(
       <Route path="/games" element={<Game />}></Route>
       <Route path="/genres" element={<Genre />}></Route>
       <Route path="/developers" element={<Developer />}></Route>
+      <Route path="/addGame" element={<GameForm />}></Route>
+      <Route path="/addGenre" element={<GenreForm />}></Route>
+      <Route path="/addDeveloper" element={<DeveloperForm />}></Route>
     </Route>
   )
 );

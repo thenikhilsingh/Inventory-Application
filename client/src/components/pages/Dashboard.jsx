@@ -2,12 +2,13 @@ import React from "react";
 import { BackgroundGradient } from "../ui/background-gradient";
 import { IconAppWindow } from "@tabler/icons-react";
 import { Library, Code, Users, User, Plus } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 export default function Home() {
   return (
     <div className="bg-black h-screen mt-15 flex flex-col items-center">
-  <div className='bg-[url("/hero-banner.jpg")] w-full h-[50%] text-white bg-cover bg-center flex flex-col justify-center items-center '>
-  <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/80 to-black pointer-events-none"></div>
+      <div className='bg-[url("/hero-banner.jpg")] w-full h-[50%] text-white bg-cover bg-center flex flex-col justify-center items-center '>
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/80 to-black pointer-events-none"></div>
         <div className="z-10 flex flex-col items-center gap-5">
           <h1 className="text-8xl font-bold"> GameVault</h1>
           <p className="text-4xl text-gray-300">
@@ -54,9 +55,11 @@ export default function Home() {
 
         <div className="grid grid-cols-3 gap-30">
           <BackgroundGradient className="flex flex-col gap-5 items-center rounded-[22px] p-6 bg-zinc-900">
-            <button className="bg-[#80808048] flex justify-center items-center size-15 rounded-full">
-              <Plus className="text-white" />
-            </button>
+            <NavLink to="/addGame">
+              <button className="bg-[#80808048] flex justify-center items-center size-15 rounded-full cursor-pointer">
+                <Plus className="text-white" />
+              </button>
+            </NavLink>
             <div>
               <p className="text-2xl font-bold  text-center text-black   dark:text-neutral-200">
                 Add New Game
@@ -67,9 +70,11 @@ export default function Home() {
             </div>
           </BackgroundGradient>
           <BackgroundGradient className="flex flex-col gap-5 items-center rounded-[22px] p-6 bg-zinc-900">
-            <button className="bg-[#80808048] flex justify-center items-center size-15 rounded-full">
-              <Plus className="text-white" />
-            </button>
+            <NavLink to="/addGenre">
+              <button className="bg-[#80808048] flex justify-center items-center size-15 rounded-full cursor-pointer">
+                <Plus className="text-white" />
+              </button>
+            </NavLink>
             <div>
               <p className="text-2xl font-bold  text-center text-black   dark:text-neutral-200">
                 Add New Genre
@@ -78,9 +83,11 @@ export default function Home() {
             </div>
           </BackgroundGradient>
           <BackgroundGradient className="flex flex-col gap-5 items-center rounded-[22px] p-6 bg-zinc-900">
-            <button className="bg-[#80808048] flex justify-center items-center size-15 rounded-full">
-              <Plus className="text-white" />
-            </button>
+            <NavLink to="/addDeveloper">
+              <button className="bg-[#80808048] flex justify-center items-center size-15 rounded-full cursor-pointer">
+                <Plus className="text-white" />
+              </button>
+            </NavLink>
             <div>
               <p className="text-2xl font-bold  text-center text-black   dark:text-neutral-200">
                 Add New Developer

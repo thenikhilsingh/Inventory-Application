@@ -1,5 +1,6 @@
 import { Button } from "../ui/moving-border";
 import { Plus } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 export default function Game() {
   return (
@@ -10,12 +11,14 @@ export default function Game() {
           <p className="text-gray-400">Manage your game collection</p>
         </div>
         <div>
-          <Button
-            borderRadius="1.75rem"
-            className=" bg-slate-900 text-white border-slate-800 flex gap-2"
-          >
-           <Plus/> Add Game
-          </Button>
+          <NavLink to="/addGame">
+            <Button
+              borderRadius="1.75rem"
+              className=" bg-slate-900 text-white border-slate-800 flex gap-2 cursor-pointer"
+            >
+              <Plus /> Add Game
+            </Button>
+          </NavLink>
         </div>
       </div>
     </div>
