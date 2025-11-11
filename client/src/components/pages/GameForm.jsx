@@ -24,7 +24,12 @@ export function GameForm() {
             <ArrowLeft /> return to Games
           </Button>
         </NavLink>
-        <form className="my-8" onSubmit={handleSubmit}>
+        <form
+          className="my-8"
+          action="/games"
+          method="POST"
+          onSubmit={handleSubmit}
+        >
           <LabelInputContainer>
             <Label htmlFor="name">Name</Label>
             <Input id="name" placeholder="enter game name" type="text" />
@@ -91,7 +96,7 @@ export function GameForm() {
             className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
             type="submit"
           >
-            Sign up &rarr;
+            Create Game
             <BottomGradient />
           </button>
         </form>
