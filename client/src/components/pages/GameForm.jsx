@@ -24,12 +24,7 @@ export function GameForm() {
             <ArrowLeft /> return to Games
           </Button>
         </NavLink>
-        <form
-          className="my-8"
-          action="/games"
-          method="POST"
-          onSubmit={handleSubmit}
-        >
+        <form className="my-8" onSubmit={handleSubmit}>
           <LabelInputContainer>
             <Label htmlFor="name">Name</Label>
             <Input id="name" placeholder="enter game name" type="text" />

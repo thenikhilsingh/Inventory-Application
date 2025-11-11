@@ -32,14 +32,14 @@ export default function Game() {
   }
 
   function handleDeleteBtn(id) {
-    axios
-      .delete(`http://localhost:3001/games/${id}`)
-      .then((response) => {
-        setGames(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // axios
+    //   .delete(`http://localhost:3001/games/${id}`)
+    //   .then((response) => {
+    //     setGames(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
 
   return (
