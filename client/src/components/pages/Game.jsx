@@ -1,24 +1,13 @@
 import axios from "axios";
 import { Button } from "../ui/moving-border";
 import { Plus, Calendar, Edit, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Meteors } from "../ui/meteors";
+import { DataContext } from "../../App";
 
 export default function Game() {
-  const [games, setGames] = useState([]);
-  const [editedData, setEditedData] = useState({});
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/games")
-      .then((response) => {
-        setGames(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
+  const { games, setGames } = useContext(DataContext);
 
   function handleEditBtn(id) {
     axios
@@ -32,14 +21,14 @@ export default function Game() {
   }
 
   function handleDeleteBtn(id) {
-    // axios
-    //   .delete(`http://localhost:3001/games/${id}`)
-    //   .then((response) => {
-    //     setGames(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    axios
+      .delete(`http://localhost:3001/games/${id}`)
+      .then((response) => {
+        setGames(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   return (
@@ -71,7 +60,7 @@ export default function Game() {
                   src={game.coverImage}
                   alt=""
                 />
-                <div className="p-5">
+                <div className="p-5 w-full">
                   <h1 className=" relative z-50 mb-2 text-xl font-bold text-white">
                     {game.title}
                   </h1>
@@ -88,23 +77,35 @@ export default function Game() {
                     ${game.price}
                   </p>
 
-                  <p className="relative z-50 mb-4 text-base font-normal text-slate-500">
-                    {game.genres}
-                  </p>
+                  {game.genres.map((genre) => {
+                    return (
+                      <p className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl">
+                        {genre.name}
+                      </p>
+                    );
+                  })}
 
-                  <p className="relative z-50 mb-4 text-base font-normal text-slate-500">
-                    {game.developers}
-                  </p>
+                  {game.developers.map((developer) => {
+                    return (
+                      <p className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl">
+                        {developer.name}
+                      </p>
+                    );
+                  })}
                   <div className="flex gap-2 justify-center items-center">
                     <button
                       className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300 flex justify-center gap-2 cursor-pointer"
-                      onClick={handleEditBtn(game._id)}
+                      onClick={() => {
+                        handleEditBtn(game._id);
+                      }}
                     >
                       <Edit /> Edit
                     </button>
                     <button
                       className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
-                      onClick={handleDeleteBtn(game._id)}
+                      onClick={() => {
+                        handleDeleteBtn(game._id);
+                      }}
                     >
                       <Trash2 />
                     </button>

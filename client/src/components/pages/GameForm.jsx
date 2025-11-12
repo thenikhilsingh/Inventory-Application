@@ -24,16 +24,27 @@ export function GameForm() {
             <ArrowLeft /> return to Games
           </Button>
         </NavLink>
-        <form className="my-8" onSubmit={handleSubmit}>
+        <form
+          className="my-8"
+          action="/games"
+          method="POST"
+          onSubmit={handleSubmit}
+        >
           <LabelInputContainer>
             <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="enter game name" type="text" />
+            <Input
+              id="name"
+              name="name"
+              placeholder="enter game name"
+              type="text"
+            />
           </LabelInputContainer>
           <br />
           <LabelInputContainer>
             <Label htmlFor="desc">Description</Label>
             <Textarea
               id="desc"
+              name="desc"
               placeholder="write about game"
               type="text"
             ></Textarea>
@@ -41,50 +52,50 @@ export function GameForm() {
           <div className="my-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
             <LabelInputContainer className="mb-4">
               <Label htmlFor="releaseDate">Release Date</Label>
-              <Input id="releaseDate" placeholder="enter Date" type="date" />
+              <Input id="releaseDate" name="releaseDate" placeholder="enter Date" type="date" />
             </LabelInputContainer>
             <LabelInputContainer className="mb-4">
               <Label htmlFor="price">Price</Label>
-              <Input id="price" placeholder="enter Price" type="Number" />
+              <Input id="price" name="price" placeholder="enter Price" type="Number" />
             </LabelInputContainer>
           </div>
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="">Genre</Label>
+            <Label htmlFor="genre">Genre</Label>
             <div className="flex text-white gap-10">
               <div className="flex gap-2">
-                <input type="radio" />
-                <label htmlFor="">Action</label>
+                <input type="radio" id="action" name="action" />
+                <label htmlFor="action">Action</label>
               </div>
               <div className="flex gap-2">
-                <input type="radio" />
-                <label htmlFor="">Adventure</label>
+                <input type="radio" id="adv" name="adv" />
+                <label htmlFor="adv">Adventure</label>
               </div>
               <div className="flex gap-2">
-                <input type="radio" />
+                <input type="radio" name="racing" id="racing" />
                 <label htmlFor="">racing</label>
               </div>
             </div>
           </LabelInputContainer>
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="">Developer</Label>
+            <Label htmlFor="developer">Developer</Label>
             <div className="flex text-white gap-10">
               <div className="flex gap-2">
-                <input type="radio" />
-                <label htmlFor="">Action</label>
+                <input type="radio" id="action" name="action" />
+                <label htmlFor="action">Action</label>
               </div>
               <div className="flex gap-2">
-                <input type="radio" />
-                <label htmlFor="">Adventure</label>
+                <input type="radio" id="adv" name="adv" />
+                <label htmlFor="adv">Adventure</label>
               </div>
               <div className="flex gap-2">
-                <input type="radio" />
+                <input type="radio" name="racing" id="racing" />
                 <label htmlFor="">racing</label>
               </div>
             </div>
           </LabelInputContainer>
           <LabelInputContainer className="mb-8">
             <Label htmlFor="cover-image">Cover Image</Label>
-            <Input id="cover-image" placeholder="enter url" type="text" />
+            <Input id="cover-image" name="cover-image" placeholder="enter url" type="text" />
           </LabelInputContainer>
 
           <button

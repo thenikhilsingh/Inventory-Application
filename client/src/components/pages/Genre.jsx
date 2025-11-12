@@ -1,23 +1,13 @@
 import axios from "axios";
 import { Button } from "../ui/moving-border";
 import { Plus, Calendar, Edit, Trash2, Gamepad2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Meteors } from "../ui/meteors";
+import { DataContext } from "../../App";
 
 export default function Genre() {
-  const [genres, setGenres] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/genres")
-      .then((response) => {
-        setGenres(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
+  const { genres, setGenres } = useContext(DataContext);
 
   return (
     <div className="h-screen w-screen bg-black flex flex-col items-center text-white">

@@ -1,10 +1,12 @@
-import React from "react";
 import { BackgroundGradient } from "../ui/background-gradient";
 import { IconAppWindow } from "@tabler/icons-react";
 import { Library, Code, Users, User, Plus } from "lucide-react";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { DataContext } from "../../App";
 
 export default function Home() {
+  const { games, genres, developers } = useContext(DataContext);
   return (
     <div className="bg-black h-screen mt-15 flex flex-col items-center">
       <div className='bg-[url("/hero-banner.jpg")] w-full h-[50%] text-white bg-cover bg-center flex flex-col justify-center items-center '>
@@ -23,7 +25,9 @@ export default function Home() {
               <p className="text-base sm:text-base mb-2 text-neutral-200">
                 Total Games
               </p>
-              <div className="text-3xl text-white font-bold">1</div>
+              <div className="text-3xl text-white font-bold">
+                {games.length}
+              </div>
             </div>
             <div className="bg-[#80808048] flex justify-center items-center size-10 rounded-lg">
               <Library className="text-white" />
@@ -34,7 +38,9 @@ export default function Home() {
               <p className="text-base sm:text-base text-black  mb-2 dark:text-neutral-200">
                 Total Genres
               </p>
-              <div className="text-3xl text-white font-bold">1</div>
+              <div className="text-3xl text-white font-bold">
+                {genres.length}
+              </div>
             </div>
             <div className="bg-[#80808048] flex justify-center items-center size-10 rounded-lg">
               <Code className="text-white" />
@@ -45,7 +51,9 @@ export default function Home() {
               <p className="text-base sm:text-base  mb-2 text-neutral-200">
                 Total Developers
               </p>
-              <div className="text-3xl text-white font-bold">1</div>
+              <div className="text-3xl text-white font-bold">
+                {developers.length}
+              </div>
             </div>
             <div className="bg-[#80808048] flex justify-center items-center size-10 rounded-lg">
               <User className="text-white" />
