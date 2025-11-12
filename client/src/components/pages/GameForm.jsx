@@ -26,25 +26,25 @@ export function GameForm() {
         </NavLink>
         <form
           className="my-8"
-          action="/games"
+          action="/http://localhost:3001/games"
           method="POST"
           onSubmit={handleSubmit}
         >
           <LabelInputContainer>
-            <Label htmlFor="name">Name</Label>
+            <Label htmlFor="title">Name</Label>
             <Input
-              id="name"
-              name="name"
+              id="title"
+              name="title"
               placeholder="enter game name"
               type="text"
             />
           </LabelInputContainer>
           <br />
           <LabelInputContainer>
-            <Label htmlFor="desc">Description</Label>
+            <Label htmlFor="description">Description</Label>
             <Textarea
-              id="desc"
-              name="desc"
+              id="description"
+              name="description"
               placeholder="write about game"
               type="text"
             ></Textarea>
@@ -94,8 +94,8 @@ export function GameForm() {
             </div>
           </LabelInputContainer>
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="cover-image">Cover Image</Label>
-            <Input id="cover-image" name="cover-image" placeholder="enter url" type="text" />
+            <Label htmlFor="coverImage">Cover Image</Label>
+            <Input id="coverImage" name="coverImage" placeholder="enter url" type="text" />
           </LabelInputContainer>
 
           <button

@@ -52,7 +52,7 @@ export default function Game() {
       <div className="w-[80%] mt-10">
         {games.map((game) => {
           return (
-            <div className="relative w-[30%]">
+            <div key={game._id} className="relative w-[30%]">
               <div className="absolute inset-0 h-full w-full scale-[0.80] transform rounded-full bg-red-500 bg-linear-to-r from-blue-500 to-teal-500 blur-3xl" />
               <div className="group relative flex h-full flex-col items-start justify-end overflow-hidden rounded-2xl border border-gray-800 bg-gray-900 shadow-xl">
                 <img
@@ -67,19 +67,19 @@ export default function Game() {
 
                   <p className="relative z-50 mb-4 text-base font-normal text-slate-500">
                     {game.description}
-                  </p>
+                  </p>  
 
                   <p className="relative z-50 mb-4 text-base text-slate-500 flex gap-2">
                     <Calendar /> {game.releaseDate}
                   </p>
 
                   <p className="relative z-50 mb-4 text-base font-normal text-slate-500">
-                    ${game.price}
+                    ${game.price} 
                   </p>
 
                   {game.genres.map((genre) => {
                     return (
-                      <p className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl">
+                      <p key={genre._id} className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl">
                         {genre.name}
                       </p>
                     );
@@ -87,7 +87,7 @@ export default function Game() {
 
                   {game.developers.map((developer) => {
                     return (
-                      <p className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl">
+                      <p key={developer._id} className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl">
                         {developer.name}
                       </p>
                     );
