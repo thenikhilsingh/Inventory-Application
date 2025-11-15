@@ -11,9 +11,10 @@ function App() {
   const [genres, setGenres] = useState([]);
   const [developers, setDevelopers] = useState([]);
 
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     axios
-      .get("http://localhost:3001/games")
+      .get(`${VITE_API_URL}/games`)
       .then((response) => {
         setGames(response.data);
       })
@@ -21,7 +22,7 @@ function App() {
         console.log(error);
       });
     axios
-      .get("http://localhost:3001/genres")
+      .get(`${VITE_API_URL}/genres`)
       .then((response) => {
         setGenres(response.data);
       })
@@ -29,7 +30,7 @@ function App() {
         console.log(error);
       });
     axios
-      .get("http://localhost:3001/developers")
+      .get(`${VITE_API_URL}/developers`)
       .then((response) => {
         setDevelopers(response.data);
       })
