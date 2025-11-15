@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://inventory-application-five.vercel.app/",
+    origin: process.env.CLIENTSIDE_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
