@@ -24,8 +24,11 @@ const router = createBrowserRouter(
       <Route path="/genres" element={<Genre />}></Route>
       <Route path="/developers" element={<Developer />}></Route>
       <Route path="/addGame" element={<GameForm />}></Route>
+      <Route path="/updateGame/:id" element={<GameForm />}></Route>
       <Route path="/addGenre" element={<GenreForm />}></Route>
+      <Route path="/updateGenre/:id" element={<GenreForm />}></Route>
       <Route path="/addDeveloper" element={<DeveloperForm />}></Route>
+      <Route path="/updateDeveloper/:id" element={<DeveloperForm />}></Route>
     </Route>
   )
 );

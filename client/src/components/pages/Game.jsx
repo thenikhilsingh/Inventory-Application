@@ -1,38 +1,27 @@
 import axios from "axios";
 import { Button } from "../ui/moving-border";
 import { Plus, Calendar, Edit, Trash2 } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Meteors } from "../ui/meteors";
 import { DataContext } from "../../App";
 
 export default function Game() {
   const { games, setGames } = useContext(DataContext);
-
-  function handleEditBtn(id) {
-    axios
-      .put(`http://localhost:3001/games/${id}`)
-      .then(() => {
-        setEditedData();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
 
   function handleDeleteBtn(id) {
-    axios
-      .delete(`http://localhost:3001/games/${id}`)
-      .then((response) => {
-        setGames(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      axios.delete(`${VITE_API_URL}/games/${id}`);
+      alert("Game deleted successfully!");
+    } catch (error) {
+      alert("Something went wrong");
+      console.log(error);
+    }
   }
 
   return (
-    <div className="h-screen w-screen bg-black flex flex-col items-center text-white">
+    <div className=" pb-20 w-screen bg-black flex flex-col items-center text-white">
       <div className="flex justify-between pt-35 w-[80%] pb-8">
         <div>
           <h1 className="text-4xl font-bold mb-2">Games Library</h1>
@@ -49,7 +38,7 @@ export default function Game() {
           </NavLink>
         </div>
       </div>
-      <div className="w-[80%] mt-10">
+      <div className="w-[80%] mt-10 flex justify-between flex-wrap">
         {games.map((game) => {
           return (
             <div key={game._id} className="relative w-[30%]">
@@ -67,19 +56,22 @@ export default function Game() {
 
                   <p className="relative z-50 mb-4 text-base font-normal text-slate-500">
                     {game.description}
-                  </p>  
+                  </p>
 
                   <p className="relative z-50 mb-4 text-base text-slate-500 flex gap-2">
                     <Calendar /> {game.releaseDate}
                   </p>
 
                   <p className="relative z-50 mb-4 text-base font-normal text-slate-500">
-                    ${game.price} 
+                    ${game.price}
                   </p>
 
                   {game.genres.map((genre) => {
                     return (
-                      <p key={genre._id} className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl">
+                      <p
+                        key={genre._id}
+                        className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl"
+                      >
                         {genre.name}
                       </p>
                     );
@@ -87,20 +79,23 @@ export default function Game() {
 
                   {game.developers.map((developer) => {
                     return (
-                      <p key={developer._id} className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl">
+                      <p
+                        key={developer._id}
+                        className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl"
+                      >
                         {developer.name}
                       </p>
                     );
                   })}
                   <div className="flex gap-2 justify-center items-center">
-                    <button
-                      className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300 flex justify-center gap-2 cursor-pointer"
-                      onClick={() => {
-                        handleEditBtn(game._id);
-                      }}
+                    <NavLink
+                      to={`/updateGame/${game._id}`}
+                      className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300   cursor-pointer"
                     >
-                      <Edit /> Edit
-                    </button>
+                      <button className="flex justify-center gap-2">
+                        <Edit /> Edit
+                      </button>
+                    </NavLink>
                     <button
                       className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
                       onClick={() => {

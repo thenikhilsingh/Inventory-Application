@@ -1,20 +1,76 @@
 "use client";
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import axios from "axios";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/moving-border";
 import { ArrowLeft } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
+import { useState } from "react";
+import { DataContext } from "../../App";
 
 export function GameForm() {
-  const handleSubmit = (e) => {
+  const { genres, developers } = useContext(DataContext);
+  const { id } = useParams();
+  const [errors, setErrors] = useState([]);
+
+  const [gameData, setGameData] = useState({
+    title: "",
+    description: "",
+    releaseDate: "",
+    price: "",
+    genres: "",
+    developers: "",
+    coverImage: "",
+  });
+
+  useEffect(() => {
+    const fetchGameData = async () => {
+      try {
+        const VITE_API_URL = import.meta.env.VITE_API_URL;
+        const res = await axios.get(`${VITE_API_URL}/games/${id}`);
+
+        setGameData(res.data);
+      } catch (error) {
+        console.error("Error fetching game data:", error);
+      }
+    };
+
+    fetchGameData();
+  }, [id]);
+
+  const handleChange = (e) => {
+    setGameData({
+      ...gameData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
+    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    try {
+      if (!id) {
+        const res = await axios.post(`${VITE_API_URL}/games`, gameData);
+        console.log("Game created:", res.data);
+        alert("Game created successfully!");
+      } else {
+        const res = await axios.put(`${VITE_API_URL}/games/${id}`, gameData);
+        console.log("Game updated:", res.data);
+        alert("Game updated successfully!");
+      }
+    } catch (error) {
+      if (error.response?.data?.errors) {
+        setErrors(error.response.data.errors);
+      } else {
+        alert("Something went wrong");
+      }
+    }
   };
   return (
-    <div className="w-full h-screen bg-black">
+    <div className="w-full bg-black">
       <div className="shadow-input mx-auto mt-25 w-[50%] rounded-none p-4 md:rounded-2xl md:p-8 bg-black">
         <NavLink to="/games">
           <Button
@@ -24,12 +80,17 @@ export function GameForm() {
             <ArrowLeft /> return to Games
           </Button>
         </NavLink>
-        <form
-          className="my-8"
-          action="/http://localhost:3001/games"
-          method="POST"
-          onSubmit={handleSubmit}
-        >
+        {errors.length > 0 && (
+          <div className="bg-red-500/20 border border-red-500 text-red-300 p-4 rounded my-4">
+            <h2 className="font-semibold mb-2">Fix the following errors:</h2>
+            <ul className="space-y-1">
+              {errors.map((err, index) => (
+                <li key={index}>• {err.msg}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <form className="my-8" onSubmit={handleSubmit}>
           <LabelInputContainer>
             <Label htmlFor="title">Name</Label>
             <Input
@@ -37,6 +98,8 @@ export function GameForm() {
               name="title"
               placeholder="enter game name"
               type="text"
+              value={gameData.title}
+              onChange={handleChange}
             />
           </LabelInputContainer>
           <br />
@@ -47,62 +110,90 @@ export function GameForm() {
               name="description"
               placeholder="write about game"
               type="text"
+              value={gameData.description}
+              onChange={handleChange}
             ></Textarea>
           </LabelInputContainer>
           <div className="my-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
             <LabelInputContainer className="mb-4">
               <Label htmlFor="releaseDate">Release Date</Label>
-              <Input id="releaseDate" name="releaseDate" placeholder="enter Date" type="date" />
+              <Input
+                id="releaseDate"
+                name="releaseDate"
+                placeholder="enter Date"
+                type="date"
+                value={gameData.releaseDate}
+                onChange={handleChange}
+              />
             </LabelInputContainer>
             <LabelInputContainer className="mb-4">
               <Label htmlFor="price">Price</Label>
-              <Input id="price" name="price" placeholder="enter Price" type="Number" />
+              <Input
+                id="price"
+                name="price"
+                placeholder="enter Price"
+                type="Number"
+                value={gameData.price}
+                onChange={handleChange}
+              />
             </LabelInputContainer>
           </div>
           <LabelInputContainer className="mb-8">
             <Label htmlFor="genre">Genre</Label>
+
             <div className="flex text-white gap-10">
-              <div className="flex gap-2">
-                <input type="radio" id="action" name="action" />
-                <label htmlFor="action">Action</label>
-              </div>
-              <div className="flex gap-2">
-                <input type="radio" id="adv" name="adv" />
-                <label htmlFor="adv">Adventure</label>
-              </div>
-              <div className="flex gap-2">
-                <input type="radio" name="racing" id="racing" />
-                <label htmlFor="">racing</label>
-              </div>
+              {genres.map((genre) => {
+                return (
+                  <div key={genre._id} className="flex gap-2">
+                    <input
+                      type="radio"
+                      id={genre.name}
+                      name="genres"
+                      value={genre._id}
+                      onChange={handleChange}
+                    />
+                    <label htmlFor={genre.name}>{genre.name}</label>
+                  </div>
+                );
+              })}
             </div>
           </LabelInputContainer>
           <LabelInputContainer className="mb-8">
             <Label htmlFor="developer">Developer</Label>
             <div className="flex text-white gap-10">
-              <div className="flex gap-2">
-                <input type="radio" id="action" name="action" />
-                <label htmlFor="action">Action</label>
-              </div>
-              <div className="flex gap-2">
-                <input type="radio" id="adv" name="adv" />
-                <label htmlFor="adv">Adventure</label>
-              </div>
-              <div className="flex gap-2">
-                <input type="radio" name="racing" id="racing" />
-                <label htmlFor="">racing</label>
-              </div>
+              {developers.map((developer) => {
+                return (
+                  <div key={developer._id} className="flex gap-2">
+                    <input
+                      type="radio"
+                      id={developer.name}
+                      name="developers"
+                      value={developer._id}
+                      onChange={handleChange}
+                    />
+                    <label htmlFor={developer.name}>{developer.name}</label>
+                  </div>
+                );
+              })}
             </div>
           </LabelInputContainer>
           <LabelInputContainer className="mb-8">
             <Label htmlFor="coverImage">Cover Image</Label>
-            <Input id="coverImage" name="coverImage" placeholder="enter url" type="text" />
+            <Input
+              id="coverImage"
+              name="coverImage"
+              placeholder="enter url"
+              type="text"
+              value={gameData.coverImage}
+              onChange={handleChange}
+            />
           </LabelInputContainer>
 
           <button
             className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
             type="submit"
           >
-            Create Game
+            {!id ? "Create Game" : "Update Game"}
             <BottomGradient />
           </button>
         </form>

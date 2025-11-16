@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
@@ -8,9 +9,35 @@ import { ArrowLeft } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 export function DeveloperForm() {
-  const handleSubmit = (e) => {
+  const [developerData, setDeveloperData] = useState({
+    name: "",
+    website: "",
+    foundedYear: "",
+    games: "",
+  });
+
+  const [errors, setErrors] = useState([]);
+
+  const handleChange = (e) => {
+    setDeveloperData({
+      ...developerData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
+    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    try {
+      const res = await axios.post(`${VITE_API_URL}/developers`, developerData);
+      alert("developer created successfully!");
+    } catch (error) {
+      if (error.response?.data?.errors) {
+        setErrors(error.response.data.errors);
+      } else {
+        alert("Something went wrong");
+      }
+    }
   };
   return (
     <div className="w-full h-screen bg-black">
@@ -23,26 +50,60 @@ export function DeveloperForm() {
             <ArrowLeft /> return to Developers
           </Button>
         </NavLink>
+        {errors.length > 0 && (
+          <div className="bg-red-500/20 border border-red-500 text-red-300 p-4 rounded my-4">
+            <h2 className="font-semibold mb-2">Fix the following errors:</h2>
+            <ul className="space-y-1">
+              {errors.map((err, index) => (
+                <li key={index}>• {err.msg}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <form className="my-8" onSubmit={handleSubmit}>
           <LabelInputContainer>
             <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="enter game name" type="text" />
+            <Input
+              id="name"
+              placeholder="enter game name"
+              type="text"
+              value={developerData.name}
+              onChange={handleChange}
+            />
           </LabelInputContainer>
           <br />
           <LabelInputContainer>
             <Label htmlFor="website">Website</Label>
-            <Input id="website" placeholder="enter Website" type="text" />
+            <Input
+              id="website"
+              placeholder="enter Website"
+              type="text"
+              value={developerData.website}
+              onChange={handleChange}
+            />
           </LabelInputContainer>
           <div className="my-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
             <LabelInputContainer className="mb-4">
               <Label htmlFor="foundedYear">Founded Year</Label>
-              <Input id="foundedYear" placeholder="enter year" type="date" />
+              <Input
+                id="foundedYear"
+                placeholder="enter year"
+                type="number"
+                value={developerData.foundedYear}
+                onChange={handleChange}
+              />
             </LabelInputContainer>
           </div>
 
           <LabelInputContainer className="mb-8">
             <Label htmlFor="games">Games</Label>
-            <Input id="games" placeholder="enter games" type="text" />
+            <Input
+              id="games"
+              placeholder="enter games"
+              type="text"
+              value={developerData.games}
+              onChange={handleChange}
+            />
           </LabelInputContainer>
 
           <button

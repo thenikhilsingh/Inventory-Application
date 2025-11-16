@@ -1,5 +1,9 @@
 const { Router } = require("express");
 const Game = require("../models/games");
+const {
+  validationResult,
+  validationGame,
+} = require("../controllers/gameController");
 
 const gameRouter = Router();
 
@@ -12,7 +16,27 @@ gameRouter.get("/", async (req, res) => {
   }
 });
 
-gameRouter.post("/", async (req, res) => {
+gameRouter.get("/:id", async (req, res) => {
+  try {
+    const game = await Game.findById(req.params.id)
+      .populate("genres")
+      .populate("developers");
+
+    if (!game) {
+      return res.status(404).json({ error: "Game not found" });
+    }
+
+    res.json(game);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+gameRouter.post("/", validationGame, async (req, res) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({ errors: error.array() });
+  }
   try {
     const game = new Game(req.body);
     await game.save();
@@ -22,7 +46,11 @@ gameRouter.post("/", async (req, res) => {
   }
 });
 
-gameRouter.put("/:id", async (req, res) => {
+gameRouter.put("/:id", validationGame, async (req, res) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({ errors: error.array() });
+  }
   try {
     const game = await Game.findByIdAndUpdate(req.params.id, req.body, {
       new: true,

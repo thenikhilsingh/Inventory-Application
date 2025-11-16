@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
@@ -9,9 +10,34 @@ import { Textarea } from "../ui/textarea";
 import { NavLink } from "react-router-dom";
 
 export function GenreForm() {
-  const handleSubmit = (e) => {
+  const [genreData, setGenreData] = useState({
+    name: "",
+    description: "",
+  });
+
+  const [errors, setErrors] = useState([]);
+
+  const handleChange = (e) => {
+    setGenreData({
+      ...genreData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
+    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    try {
+      const res = await axios.post(`${VITE_API_URL}/genres`, genreData);
+      console.log("Genre created:", res.data);
+      alert("Genre Created Successfully!");
+    } catch (error) {
+      if (error.response?.data?.errors) {
+        setErrors(error.response.data.errors);
+      } else {
+        alert("Something went wrong");
+      }
+    }
   };
   return (
     <div className="w-full h-screen bg-black">
@@ -24,18 +50,36 @@ export function GenreForm() {
             <ArrowLeft /> return to Genres
           </Button>
         </NavLink>
+        {errors.length > 0 && (
+          <div className="bg-red-500/20 border border-red-500 text-red-300 p-4 rounded my-4">
+            <h2 className="font-semibold mb-2">Fix the following errors:</h2>
+            <ul className="space-y-1">
+              {errors.map((err, index) => (
+                <li key={index}>• {err.msg}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <form className="my-8" onSubmit={handleSubmit}>
           <LabelInputContainer>
             <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="enter game name" type="text" />
+            <Input
+              id="name"
+              value={genreData.name}
+              placeholder="enter game name"
+              type="text"
+              onChange={handleChange}
+            />
           </LabelInputContainer>
           <br />
           <LabelInputContainer>
             <Label htmlFor="desc">Description</Label>
             <Textarea
-              id="desc"
+              id="description"
               placeholder="write about game"
               type="text"
+              value={genreData.description}
+              onChange={handleChange}
             ></Textarea>
           </LabelInputContainer>
 

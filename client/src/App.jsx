@@ -37,7 +37,7 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [games, genres, developers]);
   return (
     <>
       <ScrollToTop />
