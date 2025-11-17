@@ -12,7 +12,7 @@ import { useState } from "react";
 import { DataContext } from "../../App";
 
 export function GameForm() {
-  const {setGames, genres, developers } = useContext(DataContext);
+  const { setGames, genres, developers } = useContext(DataContext);
   const { id } = useParams();
   const [errors, setErrors] = useState([]);
 
@@ -32,7 +32,12 @@ export function GameForm() {
         const VITE_API_URL = import.meta.env.VITE_API_URL;
         const res = await axios.get(`${VITE_API_URL}/games/${id}`);
 
-        setGameData(res.data);
+        setGameData({
+          ...res.data,
+          releaseDate: res.data.releaseDate?.split("T")[0],
+          genres: res.data.genres?.map((g) => g._id),
+          developers: res.data.developers?.map((d) => d._id),
+        });
       } catch (error) {
         console.error("Error fetching game data:", error);
       }
@@ -54,7 +59,7 @@ export function GameForm() {
     try {
       if (!id) {
         const res = await axios.post(`${VITE_API_URL}/games`, gameData);
-        setGames(prev => [...prev, res.data]);
+        setGames((prev) => [...prev, res.data]);
         console.log("Game created:", res.data);
         alert("Game created successfully!");
       } else {
@@ -151,7 +156,7 @@ export function GameForm() {
                       id={genre.name}
                       name="genres"
                       value={genre._id}
-                       
+                      checked={gameData.genres.includes(genre._id)}
                       onChange={handleChange}
                     />
                     <label htmlFor={genre.name}>{genre.name}</label>
@@ -171,7 +176,7 @@ export function GameForm() {
                       id={developer.name}
                       name="developers"
                       value={developer._id}
-                      
+                      checked={gameData.developers.includes(developer._id)}
                       onChange={handleChange}
                     />
                     <label htmlFor={developer.name}>{developer.name}</label>
@@ -193,7 +198,7 @@ export function GameForm() {
           </LabelInputContainer>
 
           <button
-            className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+            className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] cursor-pointer"
             type="submit"
           >
             {!id ? "Create Game" : "Update Game"}

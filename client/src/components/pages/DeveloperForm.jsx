@@ -1,14 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/moving-border";
 import { ArrowLeft } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 export function DeveloperForm() {
+  const { id } = useParams();
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
   const [developerData, setDeveloperData] = useState({
     name: "",
     website: "",
@@ -17,6 +19,18 @@ export function DeveloperForm() {
   });
 
   const [errors, setErrors] = useState([]);
+
+  useEffect(() => {
+    const fetchDeveloperData = async () => {
+      try {
+        const res = await axios.get(`${VITE_API_URL}/developers/${id}`);
+        setDeveloperData(res.data);
+      } catch (error) {
+        console.error("Error fetching genre data:", error);
+      }
+    };
+    fetchDeveloperData();
+  }, [id]);
 
   const handleChange = (e) => {
     setDeveloperData({
@@ -27,10 +41,21 @@ export function DeveloperForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
+
     try {
-      const res = await axios.post(`${VITE_API_URL}/developers`, developerData);
-      alert("developer created successfully!");
+      if (!id) {
+        const res = await axios.post(
+          `${VITE_API_URL}/developers`,
+          developerData
+        );
+        alert("developer created successfully!");
+      } else {
+        const res = await axios.put(
+          `${VITE_API_URL}/developers/${id}`,
+          developerData
+        );
+        alert("developer updated successfully!");
+      }
     } catch (error) {
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
@@ -110,7 +135,7 @@ export function DeveloperForm() {
             className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
             type="submit"
           >
-            Create Developer
+            {!id ? "Create Developer" : "Update Developer"}
             <BottomGradient />
           </button>
         </form>

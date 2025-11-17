@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -7,13 +7,29 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/moving-border";
 import { ArrowLeft } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
+import { DataContext } from "../../App";
 
 export function GenreForm() {
+  const { id } = useParams();
+  const { setGenres } = useContext(DataContext);
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
   const [genreData, setGenreData] = useState({
     name: "",
     description: "",
   });
+
+  useEffect(() => {
+    const fetchGenreData = async () => {
+      try {
+        const res = await axios.get(`${VITE_API_URL}/genres/${id}`);
+        setGenreData(res.data);
+      } catch (error) {
+        console.error("Error fetching genre data:", error);
+      }
+    };
+    fetchGenreData();
+  }, [id]);
 
   const [errors, setErrors] = useState([]);
 
@@ -28,9 +44,16 @@ export function GenreForm() {
     e.preventDefault();
     const VITE_API_URL = import.meta.env.VITE_API_URL;
     try {
-      const res = await axios.post(`${VITE_API_URL}/genres`, genreData);
-      console.log("Genre created:", res.data);
-      alert("Genre Created Successfully!");
+      if (!id) {
+        const res = await axios.post(`${VITE_API_URL}/genres`, genreData);
+
+        console.log("Genre created:", res.data);
+        alert("Genre Created Successfully!");
+      } else {
+        const res = await axios.put(`${VITE_API_URL}/genres/${id}`, genreData);
+        console.log("Genre created:", res.data);
+        alert("Genre Updated Successfully!");
+      }
     } catch (error) {
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
@@ -66,7 +89,7 @@ export function GenreForm() {
             <Input
               id="name"
               value={genreData.name}
-              placeholder="enter game name"
+              placeholder="enter genre name"
               type="text"
               onChange={handleChange}
             />
@@ -76,7 +99,7 @@ export function GenreForm() {
             <Label htmlFor="desc">Description</Label>
             <Textarea
               id="description"
-              placeholder="write about game"
+              placeholder="write about genre"
               type="text"
               value={genreData.description}
               onChange={handleChange}
@@ -84,10 +107,10 @@ export function GenreForm() {
           </LabelInputContainer>
 
           <button
-            className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] mt-8"
+            className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] mt-8 cursor-pointer"
             type="submit"
           >
-            create Genre
+            {!id ? "create Genre" : "update Genre"}
             <BottomGradient />
           </button>
         </form>

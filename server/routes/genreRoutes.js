@@ -16,6 +16,20 @@ genreRouter.get("/", async (req, res) => {
   }
 });
 
+genreRouter.get("/:id", async (req, res) => {
+  try {
+    const genre = await Genre.findById(req.params.id);
+
+    if (!genre) {
+      return res.status(404).json({ error: "Genre not found" });
+    }
+
+    res.json(genre);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 genreRouter.post("/", validationGenre, async (req, res) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {

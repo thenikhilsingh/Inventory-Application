@@ -67,9 +67,14 @@ export default function Developer() {
                   </p>
 
                   <div className="flex gap-2 justify-center items-center">
-                    <button className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300 flex justify-center gap-2 cursor-pointer">
-                      <Edit /> Edit
-                    </button>
+                    <NavLink
+                      to={`/updateDeveloper/${developer._id}`}
+                      className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300 "
+                    >
+                      <button className="flex justify-center gap-2 cursor-pointer">
+                        <Edit /> Edit
+                      </button>
+                    </NavLink>
                     <button
                       className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
                       onClick={() => handleDeleteBtn(developer._id)}

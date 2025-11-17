@@ -13,6 +13,7 @@ export default function Genre() {
   function handleDeleteBtn(id) {
     try {
       axios.delete(`${VITE_API_URL}/genres/${id}`);
+      setGenres((prev) => prev.filter((item) => item._id !== id));
       alert("Genre deleted successfully!");
     } catch (error) {
       alert("Something went wrong");
@@ -59,9 +60,14 @@ export default function Genre() {
                   </p>
 
                   <div className="flex gap-2 justify-center items-center">
-                    <button className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300 flex justify-center gap-2 cursor-pointer">
-                      <Edit /> Edit
-                    </button>
+                    <NavLink
+                      to={`/updateGenre/${genre._id}`}
+                      className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300  cursor-pointer"
+                    >
+                      <button className="flex justify-center gap-2 cursor-pointer">
+                        <Edit /> Edit
+                      </button>
+                    </NavLink>
                     <button
                       className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
                       onClick={() => handleDeleteBtn(genre._id)}

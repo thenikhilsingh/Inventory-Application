@@ -16,6 +16,20 @@ developerRouter.get("/", async (req, res) => {
   }
 });
 
+developerRouter.get("/:id", async (req, res) => {
+  try {
+    const developer = await Developer.findById(req.params.id);
+
+    if (!developer) {
+      return res.status(404).json({ error: "Developer not found" });
+    }
+
+    res.json(developer);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 developerRouter.post("/", validationDeveloper, async (req, res) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
