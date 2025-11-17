@@ -7,6 +7,12 @@ import { DataContext } from "../../App";
 
 export default function Home() {
   const { games, genres, developers } = useContext(DataContext);
+
+  if (!games.length || !genres.length || !developers.length) {
+    return <div className="text-white bg-black h-screen flex justify-center items-center">
+      <h1 className="animate-pulse text-6xl">Loading...</h1>
+    </div>;
+  }
   return (
     <div className="bg-black h-screen mt-15 flex flex-col items-center">
       <div className='bg-[url("/hero-banner.jpg")] w-full h-[50%] text-white bg-cover bg-center flex flex-col justify-center items-center '>
