@@ -1,12 +1,7 @@
 const { body, validationResult } = require("express-validator");
 
 var validationGame = [
-  body("title")
-    .notEmpty()
-    .withMessage("Name is required!")
-    .trim()
-    .isAlphanumeric()
-    .withMessage("Game's Name must contain only Alphabets and Numbers"),
+  body("title").notEmpty().withMessage("Name is required!").trim(),
   body("description").notEmpty().withMessage("Description is required!").trim(),
   body("releaseDate")
     .notEmpty()
