@@ -21,7 +21,7 @@ export default function Game() {
   }
 
   return (
-    <div className=" pb-20 w-screen bg-black flex flex-col items-center text-white">
+    <div className=" pb-30 w-screen bg-black flex flex-col items-center text-white">
       <div className="flex justify-between pt-35 w-[80%] pb-8">
         <div>
           <h1 className="text-4xl font-bold mb-2">Games Library</h1>
@@ -59,7 +59,7 @@ export default function Game() {
                   </p>
 
                   <p className="relative z-50 mb-4 text-base text-slate-500 flex gap-2">
-                    <Calendar /> {game.releaseDate}
+                    <Calendar /> {new Date(game.releaseDate).toLocaleDateString("en-GB")}
                   </p>
 
                   <p className="relative z-50 mb-4 text-base font-normal text-slate-500">

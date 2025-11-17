@@ -150,6 +150,7 @@ export function GameForm() {
                       id={genre.name}
                       name="genres"
                       value={genre._id}
+                       
                       onChange={handleChange}
                     />
                     <label htmlFor={genre.name}>{genre.name}</label>
@@ -169,6 +170,7 @@ export function GameForm() {
                       id={developer.name}
                       name="developers"
                       value={developer._id}
+                      
                       onChange={handleChange}
                     />
                     <label htmlFor={developer.name}>{developer.name}</label>

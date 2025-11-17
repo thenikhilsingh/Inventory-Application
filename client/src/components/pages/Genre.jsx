@@ -8,6 +8,17 @@ import { DataContext } from "../../App";
 
 export default function Genre() {
   const { genres, setGenres } = useContext(DataContext);
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
+
+  function handleDeleteBtn(id) {
+    try {
+      axios.delete(`${VITE_API_URL}/genres/${id}`);
+      alert("Genre deleted successfully!");
+    } catch (error) {
+      alert("Something went wrong");
+      console.log(error);
+    }
+  }
 
   return (
     <div className="h-screen w-screen bg-black flex flex-col items-center text-white">
@@ -33,7 +44,7 @@ export default function Genre() {
             <div className="relative w-[30%]">
               <div className="absolute inset-0 h-full w-full scale-[0.80] transform rounded-full bg-red-500 bg-linear-to-r from-blue-500 to-teal-500 blur-3xl" />
               <div className="relative flex h-full flex-col items-start justify-end overflow-hidden rounded-2xl border border-gray-800 bg-gray-900 shadow-xl">
-                <div className="p-5">
+                <div className="p-5 w-full">
                   <div className="flex justify-between mb-2">
                     <h1 className=" relative z-50 mb-2 text-xl font-bold text-white">
                       {genre.name}
@@ -51,7 +62,10 @@ export default function Genre() {
                     <button className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300 flex justify-center gap-2 cursor-pointer">
                       <Edit /> Edit
                     </button>
-                    <button className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer">
+                    <button
+                      className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
+                      onClick={() => handleDeleteBtn(genre._id)}
+                    >
                       <Trash2 />
                     </button>
                   </div>

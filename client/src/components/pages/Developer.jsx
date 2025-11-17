@@ -8,6 +8,16 @@ import { DataContext } from "../../App";
 
 export default function Developer() {
   const { developers, setDevelopers } = useContext(DataContext);
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
+  function handleDeleteBtn(id) {
+    try {
+      axios.delete(`${VITE_API_URL}/developers/${id}`);
+      alert("Game deleted successfully!");
+    } catch (error) {
+      alert("Something went wrong");
+      console.log(error);
+    }
+  }
 
   return (
     <div className="h-screen w-screen bg-black flex flex-col items-center text-white">
@@ -60,7 +70,10 @@ export default function Developer() {
                     <button className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300 flex justify-center gap-2 cursor-pointer">
                       <Edit /> Edit
                     </button>
-                    <button className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer">
+                    <button
+                      className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
+                      onClick={() => handleDeleteBtn(developer._id)}
+                    >
                       <Trash2 />
                     </button>
                   </div>

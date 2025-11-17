@@ -12,6 +12,7 @@ function App() {
   const [developers, setDevelopers] = useState([]);
 
   const VITE_API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     axios
       .get(`${VITE_API_URL}/games`)
@@ -37,7 +38,7 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-  }, [games, genres, developers]);
+  }, []);
   return (
     <>
       <ScrollToTop />
