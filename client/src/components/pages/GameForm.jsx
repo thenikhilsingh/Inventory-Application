@@ -12,7 +12,7 @@ import { useState } from "react";
 import { DataContext } from "../../App";
 
 export function GameForm() {
-  const { genres, developers } = useContext(DataContext);
+  const {setGames, genres, developers } = useContext(DataContext);
   const { id } = useParams();
   const [errors, setErrors] = useState([]);
 
@@ -54,6 +54,7 @@ export function GameForm() {
     try {
       if (!id) {
         const res = await axios.post(`${VITE_API_URL}/games`, gameData);
+        setGames(prev => [...prev, res.data]);
         console.log("Game created:", res.data);
         alert("Game created successfully!");
       } else {

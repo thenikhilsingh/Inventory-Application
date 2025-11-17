@@ -10,9 +10,10 @@ export default function Game() {
   const { games, setGames } = useContext(DataContext);
   const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-  function handleDeleteBtn(id) {
+  async function handleDeleteBtn(id) {
     try {
-      axios.delete(`${VITE_API_URL}/games/${id}`);
+      await axios.delete(`${VITE_API_URL}/games/${id}`);
+      setGames((prev) => prev.filter((item) => item._id !== id));
       alert("Game deleted successfully!");
     } catch (error) {
       alert("Something went wrong");
@@ -59,7 +60,8 @@ export default function Game() {
                   </p>
 
                   <p className="relative z-50 mb-4 text-base text-slate-500 flex gap-2">
-                    <Calendar /> {new Date(game.releaseDate).toLocaleDateString("en-GB")}
+                    <Calendar />{" "}
+                    {new Date(game.releaseDate).toLocaleDateString("en-GB")}
                   </p>
 
                   <p className="relative z-50 mb-4 text-base font-normal text-slate-500">
