@@ -21,6 +21,12 @@ export default function Game() {
     }
   }
 
+  if (!games.length) {
+    return <div className="text-white bg-black h-screen flex justify-center items-center">
+      <h1 className="animate-pulse text-6xl">Loading...</h1>
+    </div>;
+  }
+
   return (
     <div className=" pb-30 w-screen bg-black flex flex-col items-center text-white">
       <div className="flex justify-between pt-35 w-[80%] pb-8">
