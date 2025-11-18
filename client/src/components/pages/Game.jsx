@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Meteors } from "../ui/meteors";
 import { DataContext } from "../../App";
+import Preloader from "../Preloader";
 
 export default function Game() {
   const { games, setGames } = useContext(DataContext);
@@ -22,9 +23,7 @@ export default function Game() {
   }
 
   if (!games.length) {
-    return <div className="text-white bg-black h-screen flex justify-center items-center">
-      <h1 className="animate-pulse text-6xl">Loading...</h1>
-    </div>;
+    return <Preloader />;
   }
 
   return (

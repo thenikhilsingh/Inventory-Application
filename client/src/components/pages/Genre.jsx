@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Meteors } from "../ui/meteors";
 import { DataContext } from "../../App";
+import Preloader from "../Preloader";
 
 export default function Genre() {
   const { genres, setGenres } = useContext(DataContext);
@@ -22,11 +23,7 @@ export default function Genre() {
   }
 
   if (!genres.length) {
-    return (
-      <div className="text-white bg-black h-screen flex justify-center items-center">
-        <h1 className="animate-pulse text-6xl">Loading...</h1>
-      </div>
-    );
+    return <Preloader />;
   }
 
   return (
