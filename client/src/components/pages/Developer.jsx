@@ -8,8 +8,15 @@ import { DataContext } from "../../App";
 import Preloader from "../Preloader";
 
 export default function Developer() {
-  const { developers, setDevelopers } = useContext(DataContext);
+  const { games, developers } = useContext(DataContext);
   const VITE_API_URL = import.meta.env.VITE_API_URL;
+
+  const getGamesIncluded = (developerId) => {
+    return games.filter((game) =>
+      game.developers.some((dev) => dev._id === developerId)
+    );
+  };
+
   function handleDeleteBtn(id) {
     try {
       axios.delete(`${VITE_API_URL}/developers/${id}`);
@@ -54,7 +61,7 @@ export default function Developer() {
                       {developer.name}
                     </h1>
                     <div className="flex gap-1 justify-center items-center px-4 rounded-xl bg-[#4f52e71a]">
-                      <Gamepad2 className="size-4" /> 1
+                      <Gamepad2 className="size-4" /> {getGamesIncluded(developer._id).length}
                     </div>
                   </div>
 
@@ -68,7 +75,10 @@ export default function Developer() {
                     <Calendar /> Founded in {developer.foundedYear}
                   </p>
                   <p className="relative z-50 mb-4 text-base font-normal text-slate-500">
-                    <div>Games developed:</div> <div>{developer.games}</div>
+                    <div>Games developed:</div> <div className="mt-3">{getGamesIncluded(developer._id).map((game) => {
+                      return <div className="text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-3 rounded-2xl">{game.title}</div>
+                    }
+                    )}</div>
                   </p>
 
                   <div className="flex gap-2 justify-center items-center">

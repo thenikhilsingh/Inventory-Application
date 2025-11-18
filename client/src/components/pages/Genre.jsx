@@ -8,8 +8,13 @@ import { DataContext } from "../../App";
 import Preloader from "../Preloader";
 
 export default function Genre() {
-  const { genres, setGenres } = useContext(DataContext);
+  const { games, genres, setGenres } = useContext(DataContext);
   const VITE_API_URL = import.meta.env.VITE_API_URL;
+
+  const getGameCount = (genreId) => {
+    return games.filter((game) => game.genres.some((g) => g._id === genreId))
+      .length;
+  };
 
   function handleDeleteBtn(id) {
     try {
@@ -56,7 +61,7 @@ export default function Genre() {
                       {genre.name}
                     </h1>
                     <div className="flex gap-1 justify-center items-center px-4 rounded-xl bg-[#4f52e71a]">
-                      <Gamepad2 className="size-4" /> 1
+                      <Gamepad2 className="size-4" /> {getGameCount(genre._id)}
                     </div>
                   </div>
 

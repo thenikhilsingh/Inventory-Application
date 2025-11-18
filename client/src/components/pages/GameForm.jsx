@@ -21,8 +21,8 @@ export function GameForm() {
     description: "",
     releaseDate: "",
     price: "",
-    genres: "",
-    developers: "",
+    genres: [],
+    developers: [],
     coverImage: "",
   });
 
@@ -46,12 +46,21 @@ export function GameForm() {
     fetchGameData();
   }, [id]);
 
-  const handleChange = (e) => {
-    setGameData({
-      ...gameData,
-      [e.target.name]: e.target.value,
-    });
-  };
+ const handleChange = (e) => {
+  const { name, value, checked, type } = e.target;
+
+  if (type === "checkbox") {
+    setGameData((prev) => ({
+      ...prev,
+      [name]: checked
+        ? [...prev[name], value]
+        : prev[name].filter((v) => v !== value),
+    }));
+  } else {
+    setGameData({ ...gameData, [name]: value });
+  }
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -152,7 +161,7 @@ export function GameForm() {
                 return (
                   <div key={genre._id} className="flex gap-2">
                     <input
-                      type="radio"
+                      type="checkbox"
                       id={genre.name}
                       name="genres"
                       value={genre._id}
@@ -172,7 +181,7 @@ export function GameForm() {
                 return (
                   <div key={developer._id} className="flex gap-2">
                     <input
-                      type="radio"
+                      type="checkbox"
                       id={developer.name}
                       name="developers"
                       value={developer._id}

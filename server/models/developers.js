@@ -14,10 +14,6 @@ const developerSchema = new mongoose.Schema(
       type: Number,
       required: [true, "website is required"],
     },
-    games: {
-      type: String,
-      required: [true, "games is required"],
-    },
   },
   {
     timestamps: true,
