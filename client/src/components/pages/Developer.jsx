@@ -75,7 +75,7 @@ export default function Developer() {
                     <Calendar /> Founded in {developer.foundedYear}
                   </p>
                   <p className="relative z-50 mb-4 text-base font-normal text-slate-500">
-                    <div>Games developed:</div> <div className="mt-3">{getGamesIncluded(developer._id).map((game) => {
+                    <div>Games developed:</div> <div className="mt-3 flex flex-wrap gap-2">{getGamesIncluded(developer._id).map((game) => {
                       return <div className="text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-3 rounded-2xl">{game.title}</div>
                     }
                     )}</div>

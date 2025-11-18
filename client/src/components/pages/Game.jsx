@@ -73,27 +73,30 @@ export default function Game() {
                     ${game.price}
                   </p>
 
-                  {game.genres.map((genre) => {
-                    return (
-                      <p
-                        key={genre._id}
-                        className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl"
-                      >
-                        {genre.name}
-                      </p>
-                    );
-                  })}
-
-                  {game.developers.map((developer) => {
-                    return (
-                      <p
-                        key={developer._id}
-                        className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl"
-                      >
-                        {developer.name}
-                      </p>
-                    );
-                  })}
+                  <div className="flex flex-wrap gap-2">
+                    {game.genres.map((genre) => {
+                      return (
+                        <p
+                          key={genre._id}
+                          className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl"
+                        >
+                          {genre.name}
+                        </p>
+                      );
+                    })}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {game.developers.map((developer) => {
+                      return (
+                        <p
+                          key={developer._id}
+                          className="relative z-50 mb-4 text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-2 rounded-2xl"
+                        >
+                          {developer.name}
+                        </p>
+                      );
+                    })}
+                  </div>
                   <div className="flex gap-2 justify-center items-center">
                     <NavLink
                       to={`/updateGame/${game._id}`}
