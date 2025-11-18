@@ -49,7 +49,7 @@ export default function Genre() {
           </NavLink>
         </div>
       </div>
-      <div className="w-[80%] mt-10 flex justify-between flex-wrap">
+      <div className="w-[80%] mt-10 flex justify-between flex-wrap gap-10">
         {genres.map((genre) => {
           return (
             <div className="relative w-[30%]">

@@ -11,8 +11,7 @@ var validationDeveloper = [
     .notEmpty()
     .withMessage("founded Year should not be empty!")
     .isNumeric()
-    .withMessage("Enter a valid year!"),
-  body("games").notEmpty().withMessage("Games should not be empty!").trim(),
+    .withMessage("Enter a valid year!")
 ];
 
 module.exports = { validationResult, validationDeveloper };
