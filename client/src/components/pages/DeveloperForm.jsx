@@ -15,6 +15,7 @@ export function DeveloperForm() {
   const VITE_API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const { setDevelopers } = useContext(DataContext);
+  const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
   const [developerData, setDeveloperData] = useState({
     name: "",
@@ -46,6 +47,17 @@ export function DeveloperForm() {
 
   function handleDeleteBtn(e, id) {
     e.preventDefault();
+    if (id) {
+      if (!password) {
+        alert("Please enter password");
+        return;
+      }
+
+      if (password !== ADMIN_PASSWORD) {
+        alert("Wrong password!");
+        return;
+      }
+    }
     try {
       axios.delete(`${VITE_API_URL}/developers/${id}`);
       setDevelopers((prev) => prev.filter((item) => item._id !== id));
@@ -59,7 +71,17 @@ export function DeveloperForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (id) {
+      if (!password) {
+        alert("Please enter password");
+        return;
+      }
 
+      if (password !== ADMIN_PASSWORD) {
+        alert("Wrong password!");
+        return;
+      }
+    }
     try {
       if (!id) {
         const res = await axios.post(

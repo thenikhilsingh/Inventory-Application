@@ -16,6 +16,7 @@ export function GameForm() {
   const { setGames, genres, developers } = useContext(DataContext);
   const { id } = useParams();
   const [errors, setErrors] = useState([]);
+  const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
   const [gameData, setGameData] = useState({
     title: "",
@@ -67,7 +68,17 @@ export function GameForm() {
 
   async function handleDeleteBtn(e, id) {
     e.preventDefault();
+    if (id) {
+      if (!password) {
+        alert("Please enter password");
+        return;
+      }
 
+      if (password !== ADMIN_PASSWORD) {
+        alert("Wrong password!");
+        return;
+      }
+    }
     try {
       await axios.delete(`${VITE_API_URL}/games/${id}`);
       setGames((prev) => prev.filter((item) => item._id !== id));
@@ -81,7 +92,17 @@ export function GameForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    if (id) {
+      if (!password) {
+        alert("Please enter password");
+        return;
+      }
+
+      if (password !== ADMIN_PASSWORD) {
+        alert("Wrong password!");
+        return;
+      }
+    }
     try {
       if (!id) {
         const res = await axios.post(`${VITE_API_URL}/games`, gameData);

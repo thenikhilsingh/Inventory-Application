@@ -16,6 +16,8 @@ export function GenreForm() {
   const { setGenres } = useContext(DataContext);
   const VITE_API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+  const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
   const [genreData, setGenreData] = useState({
     name: "",
@@ -45,6 +47,17 @@ export function GenreForm() {
 
   function handleDeleteBtn(e, id) {
     e.preventDefault();
+    if (id) {
+      if (!password) {
+        alert("Please enter password");
+        return;
+      }
+
+      if (password !== ADMIN_PASSWORD) {
+        alert("Wrong password!");
+        return;
+      }
+    }
     try {
       axios.delete(`${VITE_API_URL}/genres/${id}`);
       setGenres((prev) => prev.filter((item) => item._id !== id));
@@ -59,6 +72,17 @@ export function GenreForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const VITE_API_URL = import.meta.env.VITE_API_URL;
+     if (id) {
+      if (!password) {
+        alert("Please enter password");
+        return;
+      }
+
+      if (password !== ADMIN_PASSWORD) {
+        alert("Wrong password!");
+        return;
+      }
+    }
     try {
       if (!id) {
         const res = await axios.post(`${VITE_API_URL}/genres`, genreData);
@@ -67,6 +91,17 @@ export function GenreForm() {
         alert("Genre Created Successfully!");
         navigate("/genres");
       } else {
+        if (id) {
+          if (!password) {
+            alert("Please enter password");
+            return;
+          }
+
+          if (password !== ADMIN_PASSWORD) {
+            alert("Wrong password!");
+            return;
+          }
+        }
         const res = await axios.put(`${VITE_API_URL}/genres/${id}`, genreData);
         setGenres((prev) =>
           prev.map((genre) =>
@@ -134,11 +169,10 @@ export function GenreForm() {
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
-                name="password"
-                placeholder="enter the Admin's Password"
                 type="password"
-                value={genreData.password}
-                onChange={handleChange}
+                placeholder="enter admin password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </LabelInputContainer>
           )}
