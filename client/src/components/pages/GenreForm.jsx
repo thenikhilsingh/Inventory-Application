@@ -7,13 +7,16 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/moving-border";
 import { ArrowLeft } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { DataContext } from "../../App";
+import { Trash2 } from "lucide-react";
 
 export function GenreForm() {
   const { id } = useParams();
   const { setGenres } = useContext(DataContext);
   const VITE_API_URL = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
+
   const [genreData, setGenreData] = useState({
     name: "",
     description: "",
@@ -40,19 +43,39 @@ export function GenreForm() {
     });
   };
 
+  function handleDeleteBtn(e, id) {
+    e.preventDefault();
+    try {
+      axios.delete(`${VITE_API_URL}/genres/${id}`);
+      setGenres((prev) => prev.filter((item) => item._id !== id));
+      alert("Genre deleted successfully!");
+      navigate("/genres");
+    } catch (error) {
+      alert("Something went wrong");
+      console.log(error);
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const VITE_API_URL = import.meta.env.VITE_API_URL;
     try {
       if (!id) {
         const res = await axios.post(`${VITE_API_URL}/genres`, genreData);
-
+        setGenres((prev) => [...prev, res.data]);
         console.log("Genre created:", res.data);
         alert("Genre Created Successfully!");
+        navigate("/genres");
       } else {
         const res = await axios.put(`${VITE_API_URL}/genres/${id}`, genreData);
+        setGenres((prev) =>
+          prev.map((genre) =>
+            genre._id === id ? { ...genre, ...res.data } : genre
+          )
+        );
         console.log("Genre created:", res.data);
         alert("Genre Updated Successfully!");
+        navigate("/genres");
       }
     } catch (error) {
       if (error.response?.data?.errors) {
@@ -106,13 +129,37 @@ export function GenreForm() {
             ></Textarea>
           </LabelInputContainer>
 
-          <button
-            className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] mt-8 cursor-pointer"
-            type="submit"
-          >
-            {!id ? "create Genre" : "update Genre"}
-            <BottomGradient />
-          </button>
+          {id && (
+            <LabelInputContainer className="mt-8">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                name="password"
+                placeholder="enter the Admin's Password"
+                type="password"
+                value={genreData.password}
+                onChange={handleChange}
+              />
+            </LabelInputContainer>
+          )}
+
+          <div className="flex gap-5 mt-10">
+            <button
+              className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] cursor-pointer"
+              type="submit"
+            >
+              {!id ? "create Genre" : "update Genre"}
+              <BottomGradient />
+            </button>
+            {id && (
+              <button
+                className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
+                onClick={(e) => handleDeleteBtn(e, genreData._id)}
+              >
+                <Trash2 />
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </div>

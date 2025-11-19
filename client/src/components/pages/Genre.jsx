@@ -1,6 +1,5 @@
-import axios from "axios";
 import { Button } from "../ui/moving-border";
-import { Plus, Calendar, Edit, Trash2, Gamepad2 } from "lucide-react";
+import { Plus, Edit, Gamepad2 } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Meteors } from "../ui/meteors";
@@ -8,24 +7,12 @@ import { DataContext } from "../../App";
 import Preloader from "../Preloader";
 
 export default function Genre() {
-  const { games, genres, setGenres } = useContext(DataContext);
-  const VITE_API_URL = import.meta.env.VITE_API_URL;
+  const { games, genres } = useContext(DataContext);
 
   const getGameCount = (genreId) => {
     return games.filter((game) => game.genres.some((g) => g._id === genreId))
       .length;
   };
-
-  function handleDeleteBtn(id) {
-    try {
-      axios.delete(`${VITE_API_URL}/genres/${id}`);
-      setGenres((prev) => prev.filter((item) => item._id !== id));
-      alert("Genre deleted successfully!");
-    } catch (error) {
-      alert("Something went wrong");
-      console.log(error);
-    }
-  }
 
   if (!genres.length) {
     return <Preloader />;
@@ -72,18 +59,12 @@ export default function Genre() {
                   <div className="flex gap-2 justify-center items-center">
                     <NavLink
                       to={`/updateGenre/${genre._id}`}
-                      className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300  cursor-pointer"
+                      className="rounded-lg border border-gray-600 bg-[black] w-full p-2 text-gray-300  cursor-pointer"
                     >
                       <button className="flex justify-center gap-2 cursor-pointer">
                         <Edit /> Edit
                       </button>
                     </NavLink>
-                    <button
-                      className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
-                      onClick={() => handleDeleteBtn(genre._id)}
-                    >
-                      <Trash2 />
-                    </button>
                   </div>
                 </div>
                 {/* Meaty part - Meteor effect */}

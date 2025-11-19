@@ -1,16 +1,21 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/moving-border";
 import { ArrowLeft } from "lucide-react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { Trash2 } from "lucide-react";
+import { DataContext } from "../../App";
 
 export function DeveloperForm() {
   const { id } = useParams();
   const VITE_API_URL = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
+  const { setDevelopers } = useContext(DataContext);
+
   const [developerData, setDeveloperData] = useState({
     name: "",
     website: "",
@@ -39,6 +44,19 @@ export function DeveloperForm() {
     });
   };
 
+  function handleDeleteBtn(e, id) {
+    e.preventDefault();
+    try {
+      axios.delete(`${VITE_API_URL}/developers/${id}`);
+      setDevelopers((prev) => prev.filter((item) => item._id !== id));
+      alert("Game deleted successfully!");
+      navigate("/developers");
+    } catch (error) {
+      alert("Something went wrong");
+      console.log(error);
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -48,13 +66,21 @@ export function DeveloperForm() {
           `${VITE_API_URL}/developers`,
           developerData
         );
+        setDevelopers((prev) => [...prev, res.data]);
         alert("developer created successfully!");
+        navigate("/developers");
       } else {
         const res = await axios.put(
           `${VITE_API_URL}/developers/${id}`,
           developerData
         );
+        setDevelopers((prev) =>
+          prev.map((genre) =>
+            genre._id === id ? { ...genre, ...res.data } : genre
+          )
+        );
         alert("developer updated successfully!");
+        navigate("/developers");
       }
     } catch (error) {
       if (error.response?.data?.errors) {
@@ -120,13 +146,21 @@ export function DeveloperForm() {
             </LabelInputContainer>
           </div>
 
-          <button
-            className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
-            type="submit"
-          >
-            {!id ? "Create Developer" : "Update Developer"}
-            <BottomGradient />
-          </button>
+          <div className="flex gap-5">
+            <button
+              className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+              type="submit"
+            >
+              {!id ? "Create Developer" : "Update Developer"}
+              <BottomGradient />
+            </button>
+            <button
+              className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
+              onClick={(e) => handleDeleteBtn(e, developerData._id)}
+            >
+              <Trash2 />
+            </button>
+          </div>
         </form>
       </div>
     </div>

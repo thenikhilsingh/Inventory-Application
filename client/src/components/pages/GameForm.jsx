@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/moving-border";
 import { ArrowLeft } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { DataContext } from "../../App";
+import { Trash2 } from "lucide-react";
 
 export function GameForm() {
   const { setGames, genres, developers } = useContext(DataContext);
@@ -24,12 +25,15 @@ export function GameForm() {
     genres: [],
     developers: [],
     coverImage: "",
+    password: "",
   });
+
+  const navigate = useNavigate();
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchGameData = async () => {
       try {
-        const VITE_API_URL = import.meta.env.VITE_API_URL;
         const res = await axios.get(`${VITE_API_URL}/games/${id}`);
 
         setGameData({
@@ -46,21 +50,34 @@ export function GameForm() {
     fetchGameData();
   }, [id]);
 
- const handleChange = (e) => {
-  const { name, value, checked, type } = e.target;
+  const handleChange = (e) => {
+    const { name, value, checked, type } = e.target;
 
-  if (type === "checkbox") {
-    setGameData((prev) => ({
-      ...prev,
-      [name]: checked
-        ? [...prev[name], value]
-        : prev[name].filter((v) => v !== value),
-    }));
-  } else {
-    setGameData({ ...gameData, [name]: value });
+    if (type === "checkbox") {
+      setGameData((prev) => ({
+        ...prev,
+        [name]: checked
+          ? [...prev[name], value]
+          : prev[name].filter((v) => v !== value),
+      }));
+    } else {
+      setGameData({ ...gameData, [name]: value });
+    }
+  };
+
+  async function handleDeleteBtn(e, id) {
+    e.preventDefault();
+
+    try {
+      await axios.delete(`${VITE_API_URL}/games/${id}`);
+      setGames((prev) => prev.filter((item) => item._id !== id));
+      alert("Game deleted successfully!");
+      navigate("/games");
+    } catch (error) {
+      alert("Something went wrong");
+      console.log(error);
+    }
   }
-};
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,10 +88,17 @@ export function GameForm() {
         setGames((prev) => [...prev, res.data]);
         console.log("Game created:", res.data);
         alert("Game created successfully!");
+        navigate("/games");
       } else {
         const res = await axios.put(`${VITE_API_URL}/games/${id}`, gameData);
+        setGames((prev) =>
+          prev.map((game) =>
+            game._id === id ? { ...game, ...res.data } : game
+          )
+        );
         console.log("Game updated:", res.data);
         alert("Game updated successfully!");
+        navigate("/games");
       }
     } catch (error) {
       if (error.response?.data?.errors) {
@@ -206,13 +230,39 @@ export function GameForm() {
             />
           </LabelInputContainer>
 
-          <button
-            className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] cursor-pointer"
-            type="submit"
-          >
-            {!id ? "Create Game" : "Update Game"}
-            <BottomGradient />
-          </button>
+          {id && (
+            <LabelInputContainer className="mb-8">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                name="password"
+                placeholder="enter the Admin's Password"
+                type="password"
+                value={gameData.password}
+                onChange={handleChange}
+              />
+            </LabelInputContainer>
+          )}
+          <div className="flex gap-5">
+            <button
+              className="group/btn relative block h-10 w-full rounded-md bg-linear-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] cursor-pointer"
+              type="submit"
+            >
+              {!id ? "Create Game" : "Update Game"}
+              <BottomGradient />
+            </button>
+            {id && (
+              <button
+                type="button"
+                className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
+                onClick={(e) => {
+                  handleDeleteBtn(e, gameData._id);
+                }}
+              >
+                <Trash2 />
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </div>

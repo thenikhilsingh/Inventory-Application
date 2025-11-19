@@ -1,26 +1,13 @@
-import axios from "axios";
 import { Button } from "../ui/moving-border";
-import { Plus, Calendar, Edit, Trash2 } from "lucide-react";
-import { useContext, useState } from "react";
+import { Plus, Calendar, Edit } from "lucide-react";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Meteors } from "../ui/meteors";
 import { DataContext } from "../../App";
 import Preloader from "../Preloader";
 
 export default function Game() {
-  const { games, setGames } = useContext(DataContext);
-  const VITE_API_URL = import.meta.env.VITE_API_URL;
-
-  async function handleDeleteBtn(id) {
-    try {
-      await axios.delete(`${VITE_API_URL}/games/${id}`);
-      setGames((prev) => prev.filter((item) => item._id !== id));
-      alert("Game deleted successfully!");
-    } catch (error) {
-      alert("Something went wrong");
-      console.log(error);
-    }
-  }
+  const { games } = useContext(DataContext);
 
   if (!games.length) {
     return <Preloader />;
@@ -100,20 +87,12 @@ export default function Game() {
                   <div className="flex gap-2 justify-center items-center">
                     <NavLink
                       to={`/updateGame/${game._id}`}
-                      className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300   cursor-pointer"
+                      className="rounded-lg border border-gray-600 bg-[black] w-full p-2 text-gray-300   cursor-pointer"
                     >
                       <button className="flex justify-center gap-2">
                         <Edit /> Edit
                       </button>
                     </NavLink>
-                    <button
-                      className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
-                      onClick={() => {
-                        handleDeleteBtn(game._id);
-                      }}
-                    >
-                      <Trash2 />
-                    </button>
                   </div>
                 </div>
                 {/* Meaty part - Meteor effect */}

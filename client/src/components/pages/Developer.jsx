@@ -1,7 +1,6 @@
-import axios from "axios";
 import { Button } from "../ui/moving-border";
-import { Plus, Calendar, Edit, Trash2, Gamepad2, Globe } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { Plus, Calendar, Edit, Gamepad2, Globe } from "lucide-react";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Meteors } from "../ui/meteors";
 import { DataContext } from "../../App";
@@ -9,23 +8,12 @@ import Preloader from "../Preloader";
 
 export default function Developer() {
   const { games, developers } = useContext(DataContext);
-  const VITE_API_URL = import.meta.env.VITE_API_URL;
 
   const getGamesIncluded = (developerId) => {
     return games.filter((game) =>
       game.developers.some((dev) => dev._id === developerId)
     );
   };
-
-  function handleDeleteBtn(id) {
-    try {
-      axios.delete(`${VITE_API_URL}/developers/${id}`);
-      alert("Game deleted successfully!");
-    } catch (error) {
-      alert("Something went wrong");
-      console.log(error);
-    }
-  }
 
   if (!developers.length) {
     return <Preloader />;
@@ -61,7 +49,8 @@ export default function Developer() {
                       {developer.name}
                     </h1>
                     <div className="flex gap-1 justify-center items-center px-4 rounded-xl bg-[#4f52e71a]">
-                      <Gamepad2 className="size-4" /> {getGamesIncluded(developer._id).length}
+                      <Gamepad2 className="size-4" />{" "}
+                      {getGamesIncluded(developer._id).length}
                     </div>
                   </div>
 
@@ -75,27 +64,27 @@ export default function Developer() {
                     <Calendar /> Founded in {developer.foundedYear}
                   </p>
                   <p className="relative z-50 mb-4 text-base font-normal text-slate-500">
-                    <div>Games developed:</div> <div className="mt-3 flex flex-wrap gap-2">{getGamesIncluded(developer._id).map((game) => {
-                      return <div className="text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-3 rounded-2xl">{game.title}</div>
-                    }
-                    )}</div>
+                    <div>Games developed:</div>{" "}
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {getGamesIncluded(developer._id).map((game) => {
+                        return (
+                          <div className="text-base font-normal text-slate-500 bg-[#4f52e71a] w-fit p-3 rounded-2xl">
+                            {game.title}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </p>
 
                   <div className="flex gap-2 justify-center items-center">
                     <NavLink
                       to={`/updateDeveloper/${developer._id}`}
-                      className="rounded-lg border border-gray-600 bg-[black] w-[90%] p-2 text-gray-300 "
+                      className="rounded-lg border border-gray-600 bg-[black] w-full p-2 text-gray-300 "
                     >
                       <button className="flex justify-center gap-2 cursor-pointer">
                         <Edit /> Edit
                       </button>
                     </NavLink>
-                    <button
-                      className="rounded-lg  w-[10%] py-2 text-gray-300 bg-red-500 flex justify-center cursor-pointer"
-                      onClick={() => handleDeleteBtn(developer._id)}
-                    >
-                      <Trash2 />
-                    </button>
                   </div>
                 </div>
                 {/* Meaty part - Meteor effect */}
